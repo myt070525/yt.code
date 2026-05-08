@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>马雨桐 - 软件工程</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --card-bg: #ffffff;
+    --text: #1d1d1f;
+    --text-secondary: #86868b;
+    --text-tertiary: #6e6e73;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --separator: #e8e8ed;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+    --radius-sm: 12px;
+    --radius: 18px;
+    --radius-lg: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 60px 0 48px;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e9eff 0%, #3b7ddd 50%, #1e5ab5 100%);
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 500;
+    color: #fff;
+    box-shadow: 0 4px 24px rgba(0,113,227,0.2);
+  }
+
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .hero .tagline {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .hero .location {
+    font-size: 15px;
+    color: var(--text-tertiary);
+  }
+
+  /* Section cards */
+  .section {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .section:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    margin-bottom: 20px;
+  }
+
+  /* About */
+  .about-text {
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .about-text p + p {
+    margin-top: 12px;
+  }
+
+  /* Education card */
+  .edu-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+  }
+
+  .edu-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1e5ab5 0%, #3b7ddd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .edu-info h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .edu-info .edu-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .edu-info .edu-time {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  /* Skills */
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .skill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: #f5f5f7;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s ease;
+  }
+
+  .skill-tag:hover {
+    background: #e8e8ed;
+    transform: translateY(-1px);
+  }
+
+  .skill-tag.highlight {
+    background: #e3f2fd;
+    color: var(--accent);
+  }
+
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Contact */
+  .contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 16px;
+    transition: background 0.2s ease;
+  }
+
+  a.contact-item:hover {
+    background: #f5f5f7;
+  }
+
+  .contact-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-email    { background: #e3f2fd; }
+  .icon-github   { background: #f5f5f5; }
+  .icon-wechat   { background: #e8f5e9; }
+
+  .contact-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.03em;
+  }
+
+  .contact-value {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  /* QR Code section */
+  .qr-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .qr-placeholder {
+    width: 140px;
+    height: 140px;
+    background: #f5f5f7;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--separator);
+    color: var(--text-tertiary);
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .qr-placeholder .qr-icon {
+    font-size: 36px;
+    opacity: 0.5;
+  }
+
+  .qr-info h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .qr-info p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .container { padding: 32px 16px 48px; }
+    .hero { padding: 32px 0 32px; }
+    .hero h1 { font-size: 32px; }
+    .section { padding: 28px 24px; border-radius: var(--radius); }
+    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat-number { font-size: 28px; }
+    .qr-wrapper { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="avatar">
+      <img src="2.jpg" alt="马雨桐" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+    </div>
+    <h1>马雨桐</h1>
+    <p class="tagline">软件工程在读 · 前端开发爱好者</p>
+    <p class="location">贵州大学 · 计算机科学与技术学院</p>
+  </header>
+
+  <!-- 自我介绍 -->
+  <section class="section">
+    <div class="section-title">自我介绍</div>
+    <div class="about-text">
+      <p>
+        你好！我是马雨桐，贵州大学软件工程专业 2025 级本科生。
+        目前大一在读，正系统学习计算机基础与前端的核心技术栈。
+      </p>
+      <p>
+        从大一入学便开始接触前端开发，被"用代码构建出看得见摸得着的界面"这件事深深吸引。
+        课余时间喜欢拆解优秀网站的交互细节，模仿并复现它们的实现方式。
+        坚信<strong>动手实践</strong>是最好的学习路径——每个小项目都是一次成长。
+      </p>
+      <p>
+        目前正在深入学习 <strong>JavaScript / TypeScript</strong> 与 <strong>React</strong> 生态，
+        同时对 Node.js 后端开发保持好奇心，希望逐步向全栈方向拓展。
+        欢迎一起交流学习，共同进步！
+      </p>
+    </div>
+  </section>
+
+  <!-- 教育背景 -->
+  <section class="section">
+    <div class="section-title">教育背景</div>
+    <div class="edu-card">
+      <div class="edu-logo">🎓</div>
+      <div class="edu-info">
+        <h3>贵州大学 · 软件工程</h3>
+        <div class="edu-meta">计算机科学与技术学院 · 本科</div>
+        <div class="edu-time">2025 年 9 月 — 2029 年 6 月（预计）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术栈 -->
+  <section class="section">
+    <div class="section-title">技术栈</div>
+    <div class="skill-tags">
+      <span class="skill-tag highlight">HTML5</span>
+      <span class="skill-tag highlight">CSS3</span>
+      <span class="skill-tag highlight">JavaScript</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">Vue 3</span>
+      <span class="skill-tag">Tailwind CSS</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Git</span>
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">C 语言</span>
+      <span class="skill-tag">Figma</span>
+    </div>
+  </section>
+
+  <!-- 在校状态 -->
+  <section class="section">
+    <div class="section-title">在校状态</div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-number">大一</div>
+        <div class="stat-label">在读年级</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">8+</div>
+        <div class="stat-label">个人项目</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">求知欲</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section class="section">
+    <div class="section-title">联系方式</div>
+    <ul class="contact-list">
+      <a href="mailto:mayutong@example.com" class="contact-item">
+        <div class="contact-icon icon-email">📧</div>
+        <div>
+          <div class="contact-label">邮箱</div>
+          <div class="contact-value">mayutong@example.com</div>
+        </div>
+      </a>
+      <a href="https://github.com/mayutong" target="_blank" rel="noopener" class="contact-item">
+        <div class="contact-icon icon-github">💻</div>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">github.com/mayutong</div>
+        </div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-icon icon-wechat">💬</div>
+        <div>
+          <div class="contact-label">微信</div>
+          <div class="contact-value">mayutong_wx</div>
+        </div>
+      </div>
+    </ul>
+  </section>
+
+  <!-- 二维码 -->
+  <section class="section">
+    <div class="section-title">扫码联系</div>
+    <div class="qr-wrapper">
+      <img src="1.jpg" alt="微信二维码" width="140" height="140" style="border-radius:18px;object-fit:cover;">
+      <div class="qr-info">
+        <h3>微信扫一扫</h3>
+        <p>扫描二维码添加我的微信，请备注"来自主页"以便我快速通过好友申请。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 马雨桐 · 保持好奇，持续成长 · <a href="mailto:mayutong@example.com">联系我</a></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
