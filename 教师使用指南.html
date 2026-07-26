@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智力象上课管理系统 · 教师使用指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f1e8;
+  --surface: #faf7f0;
+  --surface-alt: #ede6d8;
+  --accent: #0f766e;
+  --accent-light: #14b8a6;
+  --accent-dark: #0b5d57;
+  --accent-glow: rgba(15, 118, 110, 0.08);
+  --text: #2d2a24;
+  --text-secondary: #6b6558;
+  --text-muted: #9c9484;
+  --border: #d9d0bd;
+  --border-light: #e8e1d2;
+  --moss: #4d7c0f;
+  --moss-bg: #ecfccb;
+  --amber: #b45309;
+  --amber-bg: #fef3c7;
+  --rose: #be123c;
+  --rose-bg: #ffe4e6;
+  --clay: #c2410c;
+  --slate: #475569;
+  --slate-bg: #f1f5f9;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 1px 2px rgba(45, 42, 36, 0.04);
+  --shadow: 0 2px 8px rgba(45, 42, 36, 0.06), 0 1px 3px rgba(45, 42, 36, 0.04);
+  --shadow-lg: 0 8px 32px rgba(45, 42, 36, 0.08), 0 2px 8px rgba(45, 42, 36, 0.04);
+  --font-display: 'Noto Serif SC', 'Songti SC', 'SimSun', 'STSong', serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── 背景纹理 ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 1200px 800px at 15% -10%, rgba(15, 118, 110, 0.03) 0%, transparent 70%),
+    radial-gradient(ellipse 800px 600px at 85% 60%, rgba(194, 65, 12, 0.02) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 900px at 50% 100%, rgba(15, 118, 110, 0.02) 0%, transparent 70%);
+  background-size: 100% 100%;
+}
+
+/* 纸张纹理覆盖 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+}
+
+/* ── 顶部导航 ── */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245, 241, 232, 0.85);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 24px;
+}
+
+.top-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  gap: 16px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--accent-dark);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-brand .logo-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-brand .logo-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-links a {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* ── 主容器 ── */
+.main-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ── Hero 头部 ── */
+.hero {
+  text-align: center;
+  padding: 72px 24px 56px;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+}
+
+.hero-badge .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.hero h1 .highlight {
+  position: relative;
+  color: var(--accent);
+  display: inline-block;
+}
+
+.hero h1 .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(15, 118, 110, 0.12);
+  border-radius: 4px;
+  z-index: -1;
+}
+
+.hero .subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto 0;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* 装饰性象图标 */
+.elephant-decoration {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.elephant-decoration svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+}
+
+/* ── 内容区 ── */
+.content-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── 章节卡片 ── */
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 40px 44px;
+  position: relative;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.section-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--border);
+}
+
+/* 卡片左侧色带 */
+.section-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 28px;
+  bottom: 28px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.section-number {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+}
+
+.section-header-text h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+.section-header-text p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── 步骤流程 ── */
+.steps-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  counter-reset: step;
+}
+
+.step-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 20px 24px;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.step-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow);
+}
+
+.step-marker {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+}
+
+.step-body h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.step-body p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.step-body .highlight-text {
+  display: inline-block;
+  background: var(--accent-glow);
+  color: var(--accent-dark);
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* 步骤连接线 */
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 41px;
+  top: 58px;
+  width: 1.5px;
+  height: 28px;
+  background: var(--border);
+  border-radius: 1px;
+}
+
+/* ── 矩阵图示 ── */
+.matrix-demo {
+  margin-top: 16px;
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+}
+
+.matrix-demo table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 600px;
+}
+
+.matrix-demo thead th {
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.matrix-demo thead th:first-child {
+  border-radius: var(--radius) 0 0 0;
+  text-align: left;
+  padding-left: 16px;
+}
+
+.matrix-demo thead th:last-child {
+  border-radius: 0 var(--radius) 0 0;
+}
+
+.matrix-demo tbody td {
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-light);
+  font-weight: 500;
+}
+
+.matrix-demo tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  padding-left: 16px;
+}
+
+.matrix-demo .cell-done {
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.matrix-demo .cell-pending {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-radius: 4px;
+}
+
+.matrix-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 14px;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+}
+
+.matrix-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.matrix-legend .swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.matrix-legend .swatch.green { background: #d1fae5; border: 1px solid #a7f3d0; }
+.matrix-legend .swatch.gray { background: #f1f5f9; border: 1px solid #e2e8f0; }
+
+/* ── 功能列表 ── */
+.feature-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: background 0.2s ease;
+}
+
+.feature-list li:hover {
+  background: var(--accent-glow);
+}
+
+.feature-list .feat-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(15, 118, 110, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+/* ── 科目对照表 ── */
+.subject-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+
+.subject-table thead th {
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 11px 18px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.subject-table thead th:first-child { border-radius: var(--radius) 0 0 0; }
+.subject-table thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+
+.subject-table tbody td {
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--border-light);
+  font-weight: 500;
+}
+
+.subject-table tbody tr:nth-child(even) td {
+  background: rgba(245, 241, 232, 0.4);
+}
+
+.subject-table tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 var(--radius);
+}
+
+.subject-table tbody tr:last-child td:last-child {
+  border-radius: 0 0 var(--radius) 0;
+}
+
+.subject-table code {
+  font-family: var(--font-mono);
+  background: var(--accent-glow);
+  color: var(--accent-dark);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+/* ── 正确示例网格 ── */
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.example-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #ecfccb;
+  border: 1px solid #d9f99d;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #365314;
+}
+
+.example-item .check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #4d7c0f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.example-bad {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #ffe4e6;
+  border: 1px solid #fecdd3;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #9f1239;
+  margin-top: 8px;
+}
+
+.example-bad .cross {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #be123c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* ── 匹配流程图示 ── */
+.match-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.match-flow .flow-item {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.match-flow .flow-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.match-flow .flow-result {
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-weight: 600;
+  color: #065f46;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+/* ── FAQ手风琴 ── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faq-item {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-alt);
+  transition: border-color 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: var(--border);
+}
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.faq-q:hover {
+  color: var(--accent);
+}
+
+.faq-q .q-mark {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.faq-q .arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.faq-item.open .faq-q .arrow {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding: 0 20px 0 56px;
+}
+
+.faq-item.open .faq-a {
+  max-height: 160px;
+  padding: 0 20px 18px 56px;
+}
+
+/* ── 提示块 ── */
+.tip-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 3px solid #f59e0b;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: #92400e;
+  margin-top: 12px;
+}
+
+.tip-block .tip-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.info-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--accent-dark);
+  margin-top: 12px;
+}
+
+.info-block .info-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+/* ── 登录框 ── */
+.login-demo {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.login-card-mini {
+  flex: 1;
+  min-width: 260px;
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+}
+
+.login-card-mini .lc-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.login-card-mini .lc-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  background: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  word-break: break-all;
+}
+
+.login-card-mini .lc-url {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.2s ease;
+}
+
+.login-card-mini .lc-url:hover {
+  border-color: var(--accent);
+}
+
+/* ── 引用块 ── */
+blockquote.quote-note {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-glow);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.875rem;
+  color: var(--accent-dark);
+  margin-top: 16px;
+  font-style: italic;
+}
+
+/* ── 页脚 ── */
+.page-footer {
+  text-align: center;
+  padding: 48px 24px 32px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 40px;
+}
+
+.page-footer .contact {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.page-footer .contact-name {
+  color: var(--accent);
+}
+
+.page-footer .copyright {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── 滚动动画 ── */
+.animate-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 交错延迟 */
+.animate-in:nth-child(1) { transition-delay: 0s; }
+.animate-in:nth-child(2) { transition-delay: 0.08s; }
+.animate-in:nth-child(3) { transition-delay: 0.16s; }
+.animate-in:nth-child(4) { transition-delay: 0.24s; }
+.animate-in:nth-child(5) { transition-delay: 0.32s; }
+.animate-in:nth-child(6) { transition-delay: 0.40s; }
+.animate-in:nth-child(7) { transition-delay: 0.48s; }
+
+/* ── 响应式 ── */
+@media (max-width: 768px) {
+  .top-nav-inner {
+    height: auto;
+    padding: 8px 0;
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    gap: 2px;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+  }
+  .hero {
+    padding: 40px 16px 32px;
+  }
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+  .section-card {
+    padding: 24px 20px;
+  }
+  .section-card::before {
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+  }
+  .section-header {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-number {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .section-header-text h2 {
+    font-size: 1.15rem;
+  }
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
+  .match-flow {
+    gap: 6px;
+    padding: 14px;
+  }
+  .match-flow .flow-item,
+  .match-flow .flow-result {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  .login-demo {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-a {
+    padding: 0 16px 0 40px;
+  }
+  .faq-item.open .faq-a {
+    padding: 0 16px 14px 40px;
+  }
+  .faq-q {
+    padding: 14px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links a {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+  .hero h1 {
+    font-size: 1.35rem;
+  }
+  .section-card {
+    padding: 18px 14px;
+  }
+  .example-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 打印样式 ── */
+@media print {
+  body::before, body::after { display: none; }
+  .top-nav { position: static; }
+  .section-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .animate-in { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <a href="#" class="nav-brand">
+      <span class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.5 4C17.5 4 16 5.5 15 7C14 5.5 12.5 4 10.5 4C7.5 4 5 6.5 5 9.5C5 14 10 18 15.5 21C15.5 21 18 18.5 20 16C22 13.5 22 11 20.5 9C19 7 17.5 6 17.5 6L17.5 4Z" fill="white" opacity="0.95"/>
+          <circle cx="14" cy="7" r="1.5" fill="white"/>
+        </svg>
+      </span>
+      智力象
+    </a>
+    <ul class="nav-links">
+      <li><a href="#login" class="active">登录</a></li>
+      <li><a href="#core">核心功能</a></li>
+      <li><a href="#features">功能列表</a></li>
+      <li><a href="#format">填写规范</a></li>
+      <li><a href="#faq">常见问题</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- 主体 -->
+<div class="main-container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="elephant-decoration">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 象的抽象图形 -->
+        <ellipse cx="36" cy="42" rx="24" ry="20" fill="#0f766e" opacity="0.08"/>
+        <path d="M20 44C20 34 26 28 30 26C32 31 36 34 40 35C44 34 48 31 50 26C54 28 56 34 56 44C56 54 48 58 38 58C28 58 20 54 20 44Z" fill="#0f766e" opacity="0.7"/>
+        <path d="M44 14C44 10 48 8 52 8C56 8 58 12 56 16C54 20 50 22 46 20" stroke="#0f766e" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="30" cy="34" r="2.5" fill="#0f766e" opacity="0.5"/>
+        <circle cx="42" cy="34" r="2.5" fill="#0f766e" opacity="0.5"/>
+        <path d="M38 16L36 22" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        <path d="M34 16L32 22" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        <path d="M42 16L40 22" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="hero-badge">
+      <span class="dot"></span>
+      教师使用指南 v1.0
+    </div>
+    <h1>智力象<span class="highlight">上课管理</span>系统</h1>
+    <p class="subtitle">
+      从点名系统到课时矩阵，自动同步、精准匹配、可视化呈现——<br>让每一次上课都清晰可见
+    </p>
+  </header>
+
+  <!-- 内容区 -->
+  <div class="content-sections">
+
+    <!-- 第一章：如何登录 -->
+    <section class="section-card animate-in" id="login">
+      <div class="section-header">
+        <div class="section-number">一</div>
+        <div class="section-header-text">
+          <h2>如何登录</h2>
+          <p>无需安装任何 App，手机或电脑浏览器打开即可</p>
+        </div>
+      </div>
+
+      <div class="login-demo">
+        <div class="login-card-mini">
+          <div class="lc-label">🔗 系统地址</div>
+          <a href="https://zlxbc.cn" class="lc-url" target="_blank" rel="noopener">https://zlxbc.cn</a>
+        </div>
+        <div class="login-card-mini">
+          <div class="lc-label">👤 账号</div>
+          <div class="lc-value">您的姓名 或 拼音工号</div>
+        </div>
+        <div class="login-card-mini">
+          <div class="lc-label">🔑 初始密码</div>
+          <div class="lc-value">zlx123456</div>
+        </div>
+      </div>
+
+      <blockquote class="quote-note">
+        💡 提示：若提示"用户名或密码错误"，先确认账号是否用了您<strong>本人的姓名或拼音工号</strong>（不是昵称）；仍无法登录请联系校区管理员（马雨桐）重置。
+      </blockquote>
+    </section>
+
+    <!-- 第二章：核心功能 -->
+    <section class="section-card animate-in" id="core">
+      <div class="section-header">
+        <div class="section-number">二</div>
+        <div class="section-header-text">
+          <h2>核心功能：上课内容如何同步与展示</h2>
+          <p>从点名系统的日常记录，到可视化的课时进度看板</p>
+        </div>
+      </div>
+
+      <div class="steps-flow">
+        <div class="step-item">
+          <div class="step-marker">1</div>
+          <div class="step-body">
+            <h4>在点名系统提交上课内容</h4>
+            <p>日常上课时，照常在<span class="highlight-text">小麦点名系统</span>里提交本次上课内容。这一步无需在本网站做任何额外操作。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker">2</div>
+          <div class="step-body">
+            <h4>一键同步到本系统</h4>
+            <p>进入「上课管理」页，点击<span class="highlight-text">「同步上课内容」</span>按钮，系统自动拉取最新上课记录。页面会显示「上次更新时间」。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker">3</div>
+          <div class="step-body">
+            <h4>自动匹配标准课时</h4>
+            <p>匹配引擎按<strong>"科目 + 讲次 + 相似度"</strong>把每条上课内容对应到课程库里的具体课时。匹配不上的会进入「异常提醒」供核对补正。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-marker">4</div>
+          <div class="step-body">
+            <h4>矩阵形式实时更新</h4>
+            <p>匹配完成后，页面以矩阵形式呈现——行是学员，列是标准课时，绿色代表已上，灰色代表未安排。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 矩阵示意 -->
+      <div class="matrix-demo">
+        <table>
+          <thead>
+            <tr>
+              <th>学员</th>
+              <th>第1讲 初识C++</th>
+              <th>第2讲 变量与类型</th>
+              <th>第3讲 输入输出</th>
+              <th>第4讲 条件判断</th>
+              <th>第5讲 单分支与双分支</th>
+              <th>第6讲 多分支</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>张三</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-pending">—</td>
+            </tr>
+            <tr>
+              <td>李四</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-pending">—</td>
+              <td class="cell-pending">—</td>
+              <td class="cell-pending">—</td>
+            </tr>
+            <tr>
+              <td>王五</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+              <td class="cell-done">✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="matrix-legend">
+        <span><span class="swatch green"></span>已上课时</span>
+        <span><span class="swatch gray"></span>未安排 / 未上</span>
+      </div>
+    </section>
+
+    <!-- 第三章：老师能做什么 -->
+    <section class="section-card animate-in" id="features">
+      <div class="section-header">
+        <div class="section-number">三</div>
+        <div class="section-header-text">
+          <h2>老师能在系统里做什么</h2>
+          <p>查看、筛选与核对——上课内容由点名系统自动同步，无需重复填写</p>
+        </div>
+      </div>
+
+      <ul class="feature-list">
+        <li>
+          <span class="feat-icon">📊</span>
+          <span><strong>查看上课进度</strong>：在「上课管理」页查看所带学员的课时完成、未安排、缺课等情况</span>
+        </li>
+        <li>
+          <span class="feat-icon">🔍</span>
+          <span><strong>按姓名 / 手机号搜索</strong>：快速定位到具体学员</span>
+        </li>
+        <li>
+          <span class="feat-icon">👨‍🏫</span>
+          <span><strong>按老师筛选</strong>：选自己后，班级下拉自动收窄到您带的班</span>
+        </li>
+        <li>
+          <span class="feat-icon">📋</span>
+          <span><strong>按班级筛选</strong>：只看某个班，未排课的也整行灰色显示便于核对</span>
+        </li>
+        <li>
+          <span class="feat-icon">⚠️</span>
+          <span><strong>异常提醒</strong>：未能自动匹配的记录会列在这里，方便核对补正</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 第四章：填写要求 -->
+    <section class="section-card animate-in" id="format">
+      <div class="section-header">
+        <div class="section-number">四</div>
+        <div class="section-header-text">
+          <h2>上课内容填写要求 <span style="background:#fef3c7;color:#b45309;font-size:0.65em;padding:2px 10px;border-radius:12px;font-weight:600;vertical-align:middle;">重点</span></h2>
+          <p>规范填写 = 精准匹配 = 可靠的课时统计</p>
+        </div>
+      </div>
+
+      <h4 style="font-family:var(--font-display);font-weight:600;margin-bottom:10px;color:var(--text);">📝 基本格式</h4>
+      <div class="match-flow">
+        <span class="flow-item">科目</span>
+        <span class="flow-arrow">+</span>
+        <span class="flow-item">空格</span>
+        <span class="flow-arrow">+</span>
+        <span class="flow-item">具体上课内容名称</span>
+      </div>
+
+      <h4 style="font-family:var(--font-display);font-weight:600;margin:28px 0 10px;color:var(--text);">📋 科目对照表</h4>
+      <div style="overflow-x:auto;">
+        <table class="subject-table">
+          <thead>
+            <tr>
+              <th>您填的科目</th>
+              <th>系统识别为</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Scratch</code></td><td>图形化</td></tr>
+            <tr><td><code>C++</code></td><td>C</td></tr>
+            <tr><td><code>Arduino</code></td><td>单片机</td></tr>
+            <tr><td><code>3D打印</code></td><td>打印</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.825rem;color:var(--text-muted);margin-top:8px;">其余科目（如 Python、WeDo 等）按实际名称填写即可。</p>
+
+      <h4 style="font-family:var(--font-display);font-weight:600;margin:28px 0 10px;color:var(--text);">✍️ 讲次写法建议</h4>
+      <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:10px;">写清"第几讲 / 第几课"，便于系统精准匹配：</p>
+      <div class="example-grid">
+        <div class="example-item"><span class="check">✓</span>C++ 第五讲</div>
+        <div class="example-item"><span class="check">✓</span>图形化 第十课 循环结构</div>
+        <div class="example-item"><span class="check">✓</span>单片机 第三讲 点亮LED</div>
+        <div class="example-item"><span class="check">✓</span>打印 第一讲 认识打印机</div>
+      </div>
+      <div class="example-bad" style="margin-top:12px;">
+        <span class="cross">✗</span>只写"上课""复习"（太模糊，无法匹配到具体课时）
+      </div>
+
+      <h4 style="font-family:var(--font-display);font-weight:600;margin:28px 0 10px;color:var(--text);">🔗 匹配原理</h4>
+      <div class="match-flow">
+        <span class="flow-item">C++ 第五讲</span>
+        <span class="flow-arrow">→</span>
+        <span style="font-size:0.8rem;color:var(--text-muted);">科目 + 讲次 + 相似度匹配</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-result">第5讲 单分支与双分支 ✓</span>
+      </div>
+
+      <div class="tip-block">
+        <span class="tip-icon">⚠️</span>
+        <span>如果一条内容没匹配上，它会出现在<strong>「异常提醒」</strong>里，您或管理员可手动补正。</span>
+      </div>
+    </section>
+
+    <!-- 第五章：常见问题 -->
+    <section class="section-card animate-in" id="faq">
+      <div class="section-header">
+        <div class="section-number">五</div>
+        <div class="section-header-text">
+          <h2>常见问题</h2>
+          <p>使用过程中可能遇到的问题与解答</p>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            <span class="q-mark">Q</span>
+            登录不上怎么办？
+            <span class="arrow">▾</span>
+          </button>
+          <div class="faq-a">
+            确认账号是您本人姓名（如 <code>冯帅</code>）或拼音工号（如 <code>huhaijun</code>），密码为 <code>zlx123456</code>；仍不行请联系管理员重置。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            <span class="q-mark">Q</span>
+            想只看自己某个班的上课情况？
+            <span class="arrow">▾</span>
+          </button>
+          <div class="faq-a">
+            进入「上课管理」页，先选"老师"为您本人，再在"班级"下拉里选对应班级即可（选了老师后班级会自动收窄到您带的班）。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            <span class="q-mark">Q</span>
+            内容在"异常提醒"里显示"待匹配"？
+            <span class="arrow">▾</span>
+          </button>
+          <div class="faq-a">
+            通常是填写格式未被识别（如缺科目、讲次不清）。请按第四节规范重填，或联系管理员手动关联对应课时。
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+            <span class="q-mark">Q</span>
+            密码能自己改吗？
+            <span class="arrow">▾</span>
+          </button>
+          <div class="faq-a">
+            当前为统一初始密码，请妥善保管；如需修改请联系校区管理员（马雨桐）。
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="page-footer">
+    <p class="contact">📞 使用问题请联系：<span class="contact-name">马雨桐（校区管理员）</span></p>
+    <p class="copyright">智力象上课管理系统 &copy; 2025</p>
+  </footer>
+
+</div>
+
+<script>
+// 滚动渐入动画
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+
+// 导航高亮
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 80;
+    if (scrollY >= top) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>
